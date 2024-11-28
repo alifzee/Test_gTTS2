@@ -1,28 +1,25 @@
-# new
-
 import streamlit as st
-from gtts import gTTS
+import pyttsx3
 from io import BytesIO
 
-# If you're using configuration, ensure it is placed in a dictionary
-config = {
-    "include_colab_link": True  # This is optional if you don't need this config.
-}
+# Initialize the pyttsx3 engine
+engine = pyttsx3.init()
 
-# Function to convert text to speech
+# Function to convert text to speech using pyttsx3
 def text_to_speech(text):
-    tts = gTTS(text)
-    audio_buffer = BytesIO()
-    tts.save(audio_buffer)
-    audio_buffer.seek(0)  # Rewind the audio buffer to start
-    return audio_buffer
+    # Save the speech to a temporary audio file
+    audio_file = BytesIO()
+    engine.save_to_file(text, audio_file)
+    audio_file.seek(0)  # Move the cursor to the beginning of the file
+    return audio_file
 
 # Streamlit app interface
 st.title("Text to Speech")
-st.write("Enter text and the app will convert it to speech")
+st.write("Enter text and the app will convert it to speech.")
 
-text_input = st.text_input("Type something here")
+# User input for text
+text_input = st.text_input("Type something here:")
 
 if text_input:
     audio_output = text_to_speech(text_input)
-    st.audio(audio_output, format="audio/mp3")
+    st.audio(audio_output, format="audio/wav")
