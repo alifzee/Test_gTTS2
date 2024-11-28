@@ -1,55 +1,26 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": [],
-      "authorship_tag": "ABX9TyPJQc1c2i/M2PQyFegMEQlY",
-      "include_colab_link": true
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "markdown",
-      "metadata": {
-        "id": "view-in-github",
-        "colab_type": "text"
-      },
-      "source": [
-        "<a href=\"https://colab.research.google.com/github/alifzee/Test_gTTS2/blob/main/app.py\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "!streamlit run app.py & npx localtunnel --port 8501 & curl ipv4.icanhazip.com\n"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "id": "w2CoZQNg_Jvj",
-        "outputId": "19fc4cd8-d9fd-4875-9bd7-5b5f00494785"
-      },
-      "execution_count": null,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "/bin/bash: line 1: streamlit: command not found\n",
-            "34.19.75.43\n",
-            "\u001b[1G\u001b[0K⠙\u001b[1G\u001b[0K⠹\u001b[1G\u001b[0K⠸\u001b[1G\u001b[0K⠼\u001b[1G\u001b[0K⠴\u001b[1G\u001b[0Kyour url is: https://puny-icons-fold.loca.lt\n"
-          ]
-        }
-      ]
-    }
-  ]
+import streamlit as st
+from gtts import gTTS
+from io import BytesIO
+
+# If you're using configuration, ensure it is placed in a dictionary
+config = {
+    "include_colab_link": True  # This is optional if you don't need this config.
 }
+
+# Function to convert text to speech
+def text_to_speech(text):
+    tts = gTTS(text)
+    audio_buffer = BytesIO()
+    tts.save(audio_buffer)
+    audio_buffer.seek(0)  # Rewind the audio buffer to start
+    return audio_buffer
+
+# Streamlit app interface
+st.title("Text to Speech")
+st.write("Enter text and the app will convert it to speech")
+
+text_input = st.text_input("Type something here")
+
+if text_input:
+    audio_output = text_to_speech(text_input)
+    st.audio(audio_output, format="audio/mp3")
